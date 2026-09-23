@@ -1,0 +1,699 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+    /* =========================================
+       BUDGET PAGE
+       ========================================= */
+
+    .budgets-page {
+        width: 100%;
+    }
+
+
+    /* =========================================
+       CREATE BUDGET CARD
+       ========================================= */
+
+    .budget-form-card {
+        background: #ffffff;
+
+        border: 1px solid #e2e8f0;
+
+        border-radius: 18px;
+
+        padding: 28px;
+
+        margin-bottom: 32px;
+
+        box-shadow:
+            0 8px 25px rgba(7, 29, 58, 0.07);
+    }
+
+    .budget-form-header {
+        margin-bottom: 24px;
+    }
+
+    .budget-form-header h3 {
+        margin: 0;
+
+        color: #071d3a;
+
+        font-size: 19px;
+        font-weight: 700;
+    }
+
+    .budget-form-header p {
+        margin-top: 5px;
+
+        color: #64748b;
+
+        font-size: 13px;
+    }
+
+
+    /* =========================================
+       FORM GRID
+       ========================================= */
+
+    .budget-form {
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 20px;
+
+        align-items: end;
+    }
+
+    .form-group {
+        margin: 0;
+    }
+
+    .form-group label {
+        display: block;
+
+        margin-bottom: 8px;
+
+        color: #0f2746;
+
+        font-size: 13px;
+        font-weight: 650;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+
+        height: 46px;
+
+        padding: 0 13px;
+
+        box-sizing: border-box;
+
+        border: 1px solid #cbd5e1;
+
+        border-radius: 9px;
+
+        background: #f8fafc;
+
+        color: #111827;
+
+        font-size: 14px;
+
+        outline: none;
+
+        transition: all 0.2s ease;
+    }
+
+    .form-group input:hover,
+    .form-group select:hover {
+        border-color: #94a3b8;
+
+        background: #ffffff;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: #082f63;
+
+        background: #ffffff;
+
+        box-shadow:
+            0 0 0 3px rgba(8, 47, 99, 0.10);
+    }
+
+
+    /* =========================================
+       CREATE BUTTON
+       ========================================= */
+
+    .create-budget-btn {
+        height: 46px;
+
+        border: none;
+
+        border-radius: 9px;
+
+        background: #082f63;
+
+        color: #ffffff;
+
+        font-size: 14px;
+        font-weight: 650;
+
+        cursor: pointer;
+
+        transition: all 0.2s ease;
+    }
+
+    .create-budget-btn:hover {
+        background: #041f43;
+
+        transform: translateY(-1px);
+
+        box-shadow:
+            0 7px 18px rgba(8, 47, 99, 0.20);
+    }
+
+
+    /* =========================================
+       BUDGET SECTION HEADER
+       ========================================= */
+
+    .budget-list-header {
+        display: flex;
+
+        align-items: center;
+        justify-content: space-between;
+
+        margin-bottom: 17px;
+    }
+
+    .budget-list-header h3 {
+        color: #071d3a;
+
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .budget-count {
+        padding: 5px 11px;
+
+        border-radius: 20px;
+
+        background: #e8eef7;
+
+        color: #082f63;
+
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+
+    /* =========================================
+       BUDGET GRID
+       ========================================= */
+
+    .budget-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(auto-fill, minmax(290px, 1fr));
+
+        gap: 20px;
+    }
+
+
+    /* =========================================
+       BUDGET CARD
+       ========================================= */
+
+    .budget-card {
+        background: #ffffff;
+
+        border: 1px solid #e2e8f0;
+
+        border-radius: 16px;
+
+        padding: 22px;
+
+        box-shadow:
+            0 7px 22px rgba(7, 29, 58, 0.06);
+
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .budget-card:hover {
+        transform: translateY(-3px);
+
+        box-shadow:
+            0 13px 30px rgba(7, 29, 58, 0.10);
+    }
+
+
+    /* =========================================
+       CARD HEADER
+       ========================================= */
+
+    .budget-header {
+        display: flex;
+
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 15px;
+
+        margin-bottom: 5px;
+    }
+
+    .budget-header h3 {
+        margin: 0;
+
+        color: #071d3a;
+
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .delete {
+        color: #64748b;
+
+        font-size: 12px;
+        font-weight: 600;
+
+        padding: 5px 8px;
+
+        border-radius: 6px;
+
+        transition: all 0.2s ease;
+    }
+
+    .delete:hover {
+        color: #ffffff;
+
+        background: #111827;
+    }
+
+
+    /* =========================================
+       MONTH
+       ========================================= */
+
+    .budget-card > p:first-of-type {
+        margin: 0 0 20px;
+
+        color: #64748b;
+
+        font-size: 13px;
+    }
+
+
+    /* =========================================
+       VALUES
+       ========================================= */
+
+    .budget-values {
+        display: flex;
+
+        justify-content: space-between;
+
+        gap: 10px;
+
+        margin-bottom: 12px;
+    }
+
+    .budget-values span {
+        color: #475569;
+
+        font-size: 12px;
+        font-weight: 550;
+    }
+
+    .budget-values span:last-child {
+        color: #071d3a;
+
+        font-weight: 700;
+    }
+
+
+    /* =========================================
+       PROGRESS BAR
+       ========================================= */
+
+    .progress {
+        width: 100%;
+
+        height: 9px;
+
+        overflow: hidden;
+
+        background: #e8edf4;
+
+        border-radius: 20px;
+
+        margin-bottom: 13px;
+    }
+
+    .progress-bar {
+        width: min(var(--progress-width), 100%);
+
+        height: 100%;
+
+        border-radius: 20px;
+
+        background:
+            linear-gradient(
+                90deg,
+                #082f63,
+                #174f91
+            );
+
+        transition: width 0.5s ease;
+    }
+
+
+    /* =========================================
+       REMAINING TEXT
+       ========================================= */
+
+    .budget-card > p:last-child {
+        margin: 0;
+
+        color: #475569;
+
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+
+    /* =========================================
+       EMPTY STATE
+       ========================================= */
+
+    .empty-budget {
+        grid-column: 1 / -1;
+
+        text-align: center;
+
+        padding: 50px 20px;
+
+        background: #ffffff;
+
+        border: 1px dashed #cbd5e1;
+
+        border-radius: 16px;
+    }
+
+    .empty-budget h3 {
+        margin-bottom: 7px;
+
+        color: #071d3a;
+
+        font-size: 17px;
+    }
+
+    .empty-budget p {
+        color: #64748b;
+
+        font-size: 13px;
+    }
+
+
+    /* =========================================
+       RESPONSIVE
+       ========================================= */
+
+    @media (max-width: 850px) {
+
+        .budget-form {
+            grid-template-columns: 1fr;
+        }
+
+        .create-budget-btn {
+            width: 100%;
+        }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+        .budget-form-card {
+            padding: 22px;
+        }
+
+        .budget-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .budget-list-header h3 {
+            font-size: 18px;
+        }
+
+        .budget-values {
+            flex-direction: column;
+            gap: 5px;
+        }
+
+    }
+
+</style>
+
+<div class="budgets-page">
+
+```
+<!-- =====================================
+     PAGE HEADER
+     ===================================== -->
+
+<div class="page-header">
+
+    <div>
+
+        <h2>
+            Budgets
+        </h2>
+
+        <p>
+            Set and monitor your monthly spending limits
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     CREATE BUDGET
+     ===================================== -->
+
+<div class="budget-form-card">
+
+    <div class="budget-form-header">
+
+        <h3>
+            Create Budget
+        </h3>
+
+        <p>
+            Set a monthly spending limit for a category
+        </p>
+
+    </div>
+
+
+    <form method="POST"
+          class="budget-form">
+
+
+        <div class="form-group">
+
+            <label for="category">
+                Category
+            </label>
+
+            <select
+                name="category"
+                id="category"
+                required
+            >
+
+                {% for category in categories %}
+
+                    {% if category.type == "expense" %}
+
+                    <option value="{{ category.name }}">
+
+                        {{ category.name }}
+
+                    </option>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="amount">
+                Monthly Limit
+            </label>
+
+            <input
+                type="number"
+                id="amount"
+                name="amount"
+                step="0.01"
+                min="0"
+                placeholder="₹ 10,000"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="month">
+                Month
+            </label>
+
+            <input
+                type="month"
+                id="month"
+                name="month"
+                required
+            >
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="create-budget-btn"
+        >
+            Create Budget
+        </button>
+
+    </form>
+
+</div>
+
+
+<!-- =====================================
+     BUDGET LIST
+     ===================================== -->
+
+<div class="budget-list-header">
+
+    <h3>
+        Your Budgets
+    </h3>
+
+    <span class="budget-count">
+        {{ budgets|length }} Budget{% if budgets|length != 1 %}s{% endif %}
+    </span>
+
+</div>
+
+
+<div class="budget-grid">
+
+    {% if budgets %}
+
+        {% for budget in budgets %}
+
+        <div class="budget-card">
+
+
+            <!-- CARD HEADER -->
+
+            <div class="budget-header">
+
+                <h3>
+                    {{ budget.category }}
+                </h3>
+
+                <a
+                    href="{{ url_for('delete_budget', id=budget.id) }}"
+                    class="delete"
+                    onclick="return confirmDelete()"
+                >
+                    Delete
+                </a>
+
+            </div>
+
+
+            <!-- MONTH -->
+
+            <p>
+                {{ budget.month }}
+            </p>
+
+
+            <!-- VALUES -->
+
+            <div class="budget-values">
+
+                <span>
+                    Spent:
+                    ₹{{ "%.2f"|format(budget.spent) }}
+                </span>
+
+                <span>
+                    Limit:
+                    ₹{{ "%.2f"|format(budget.amount|float) }}
+                </span>
+
+            </div>
+
+
+            <!-- PROGRESS -->
+
+            <div class="progress">
+
+                <div
+                    class="progress-bar"
+                    style="--progress-width: {{ budget.percentage }}%;"
+                >
+                </div>
+
+            </div>
+
+
+            <!-- REMAINING -->
+
+            <p>
+
+                {% if budget.remaining >= 0 %}
+
+                    Remaining:
+                    ₹{{ "%.2f"|format(budget.remaining) }}
+
+                {% else %}
+
+                    Over budget by:
+                    ₹{{ "%.2f"|format(budget.remaining|abs) }}
+
+                {% endif %}
+
+            </p>
+
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty-budget">
+
+            <h3>
+                No budgets yet
+            </h3>
+
+            <p>
+                Create your first monthly budget above to start tracking your spending.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+```
+
+</div>
+
+{% endblock %}

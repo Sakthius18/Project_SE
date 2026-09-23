@@ -1,0 +1,632 @@
+```html
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    /* =========================================
+       Transactions Page
+    ========================================= */
+
+    .transactions-page {
+        width: 100%;
+    }
+
+    /* Page Header */
+    .transactions-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 28px;
+    }
+
+    .header-label {
+        display: inline-block;
+        margin-bottom: 7px;
+        color: #174f91;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+    }
+
+    .transactions-header h2 {
+        margin: 0;
+        color: #071d3a;
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    .transactions-header p {
+        margin: 7px 0 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    /* Add Button */
+    .add-transaction-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 18px;
+        background: #071d3a;
+        color: #ffffff !important;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+        box-shadow: 0 5px 14px rgba(7, 29, 58, 0.15);
+    }
+
+    .add-transaction-btn:hover {
+        background: #041f43;
+        transform: translateY(-1px);
+        box-shadow: 0 7px 18px rgba(7, 29, 58, 0.22);
+    }
+
+    /* Main Card */
+    .transactions-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        padding: 22px;
+        box-shadow: 0 8px 25px rgba(7, 29, 58, 0.07);
+    }
+
+    /* Filter Section */
+    .filter-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .filter-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        color: #111827;
+        font-size: 15px;
+        font-weight: 750;
+        white-space: nowrap;
+    }
+
+    .filter-icon {
+        width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e8eef7;
+        color: #071d3a;
+        border-radius: 9px;
+        font-size: 15px;
+    }
+
+    /* Filter Form */
+    .filter-form {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr auto;
+        gap: 10px;
+        margin-bottom: 22px;
+    }
+
+    .filter-form input,
+    .filter-form select {
+        width: 100%;
+        height: 44px;
+        box-sizing: border-box;
+        padding: 0 13px;
+        background: #f8fafc;
+        border: 1px solid #dbe3ec;
+        border-radius: 9px;
+        color: #111827;
+        font-family: inherit;
+        font-size: 13px;
+        outline: none;
+        transition: all 0.2s ease;
+    }
+
+    .filter-form input::placeholder {
+        color: #94a3b8;
+    }
+
+    .filter-form input:focus,
+    .filter-form select:focus {
+        background: #ffffff;
+        border-color: #174f91;
+        box-shadow: 0 0 0 3px rgba(23, 79, 145, 0.10);
+    }
+
+    .filter-btn {
+        height: 44px;
+        padding: 0 20px;
+        border: none;
+        border-radius: 9px;
+        background: #071d3a;
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+        background: #041f43;
+        transform: translateY(-1px);
+    }
+
+    /* Table */
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+        border: 1px solid #e2e8f0;
+        border-radius: 13px;
+    }
+
+    .transactions-table {
+        width: 100%;
+        min-width: 950px;
+        border-collapse: collapse;
+    }
+
+    .transactions-table thead {
+        background: #071d3a;
+    }
+
+    .transactions-table th {
+        padding: 14px 15px;
+        color: #ffffff;
+        font-size: 11px;
+        font-weight: 750;
+        letter-spacing: 0.3px;
+        text-align: left;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .transactions-table td {
+        padding: 15px;
+        border-bottom: 1px solid #edf1f5;
+        color: #334155;
+        font-size: 13px;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .transactions-table tbody tr {
+        transition: background 0.2s ease;
+    }
+
+    .transactions-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .transactions-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Date */
+    .transaction-date {
+        color: #475569;
+        font-weight: 600;
+    }
+
+    /* Description */
+    .transaction-description {
+        max-width: 220px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #111827;
+        font-weight: 650;
+    }
+
+    /* Category */
+    .transaction-category {
+        color: #475569;
+    }
+
+    /* Payment */
+    .payment-method {
+        display: inline-flex;
+        padding: 5px 9px;
+        background: #f1f5f9;
+        border-radius: 7px;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 650;
+    }
+
+    /* Badges */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 65px;
+        padding: 5px 9px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 750;
+        text-transform: capitalize;
+    }
+
+    .badge.income {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .badge.expense {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    /* Amount */
+    .transaction-amount {
+        color: #071d3a !important;
+        font-weight: 800 !important;
+    }
+
+    /* Actions */
+    .actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .action-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 10px;
+        border-radius: 7px;
+        background: #e8eef7;
+        color: #174f91 !important;
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 750;
+        transition: all 0.2s ease;
+    }
+
+    .action-link:hover {
+        background: #dbe7f5;
+    }
+
+    .action-link.delete {
+        background: #fee2e2;
+        color: #dc2626 !important;
+    }
+
+    .action-link.delete:hover {
+        background: #fecaca;
+    }
+
+    /* Empty State */
+    .empty-state {
+        padding: 55px 20px !important;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 52px;
+        height: 52px;
+        margin: 0 auto 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+        background: #e8eef7;
+        color: #174f91;
+        font-size: 21px;
+    }
+
+    .empty-state strong {
+        display: block;
+        margin-bottom: 5px;
+        color: #334155;
+        font-size: 14px;
+    }
+
+    .empty-state span {
+        color: #94a3b8;
+        font-size: 12px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+        .filter-form {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .filter-btn {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 650px) {
+        .transactions-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .add-transaction-btn {
+            width: 100%;
+        }
+
+        .transactions-header h2 {
+            font-size: 24px;
+        }
+
+        .transactions-card {
+            padding: 16px;
+            border-radius: 15px;
+        }
+
+        .filter-form {
+            grid-template-columns: 1fr;
+        }
+
+        .filter-section {
+            margin-bottom: 16px;
+        }
+
+        .transactions-table {
+            min-width: 900px;
+        }
+    }
+</style>
+
+
+<div class="transactions-page">
+
+    <!-- Page Header -->
+    <div class="transactions-header">
+
+        <div>
+            <span class="header-label">Financial Management</span>
+
+            <h2>Transactions</h2>
+
+            <p>
+                Manage your income and expenses
+            </p>
+        </div>
+
+        <a href="{{ url_for('add_transaction') }}"
+           class="add-transaction-btn">
+
+            + Add Transaction
+
+        </a>
+
+    </div>
+
+
+    <!-- Main Card -->
+    <div class="transactions-card">
+
+        <!-- Filter Header -->
+        <div class="filter-section">
+
+            <div class="filter-title">
+
+                <div class="filter-icon">
+                    ⚙
+                </div>
+
+                <span>Filter Transactions</span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Filter Form -->
+        <form method="GET"
+              class="filter-form">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search transactions..."
+                value="{{ request.args.get('search', '') }}"
+            >
+
+
+            <select name="type">
+
+                <option value="">
+                    All Types
+                </option>
+
+                <option value="income"
+                    {% if request.args.get('type') == 'income' %}
+                        selected
+                    {% endif %}>
+
+                    Income
+
+                </option>
+
+                <option value="expense"
+                    {% if request.args.get('type') == 'expense' %}
+                        selected
+                    {% endif %}>
+
+                    Expense
+
+                </option>
+
+            </select>
+
+
+            <select name="category">
+
+                <option value="">
+                    All Categories
+                </option>
+
+                {% for category in categories %}
+
+                    <option
+                        value="{{ category.name }}"
+                        {% if request.args.get('category') == category.name %}
+                            selected
+                        {% endif %}
+                    >
+
+                        {{ category.name }}
+
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <button type="submit" class="filter-btn">
+                Filter
+            </button>
+
+        </form>
+
+
+        <!-- Transactions Table -->
+        <div class="table-container">
+
+            <table class="transactions-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Payment</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for transaction in transactions %}
+
+                    <tr>
+
+                        <td class="transaction-date">
+                            {{ transaction.date }}
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge {{ transaction.type }}">
+                                {{ transaction.type|capitalize }}
+                            </span>
+
+                        </td>
+
+
+                        <td class="transaction-description"
+                            title="{{ transaction.description }}">
+
+                            {{ transaction.description }}
+
+                        </td>
+
+
+                        <td class="transaction-category">
+                            {{ transaction.category }}
+                        </td>
+
+
+                        <td>
+
+                            <span class="payment-method">
+                                {{ transaction.payment_method }}
+                            </span>
+
+                        </td>
+
+
+                        <td class="transaction-amount">
+
+                            ₹{{ "%.2f"|format(transaction.amount|float) }}
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="actions">
+
+                                <a
+                                    href="{{ url_for('edit_transaction', id=transaction.id) }}"
+                                    class="action-link"
+                                >
+                                    Edit
+                                </a>
+
+
+                                <a
+                                    href="{{ url_for('delete_transaction', id=transaction.id) }}"
+                                    class="action-link delete"
+                                    onclick="return confirmDelete()"
+                                >
+                                    Delete
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="7"
+                            class="empty-state">
+
+                            <div class="empty-icon">
+                                📋
+                            </div>
+
+                            <strong>No transactions found</strong>
+
+                            <span>
+                                Try changing your filters or add a new transaction.
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+```

@@ -1,0 +1,371 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+    /* =========================================
+       NOTIFICATIONS PAGE
+       ========================================= */
+
+    .notifications-page {
+        width: 100%;
+    }
+
+    .notification-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .notification-header h2 {
+        color: #071d3a;
+        font-size: 28px;
+        font-weight: 750;
+        letter-spacing: -0.6px;
+    }
+
+    .notification-header p {
+        margin-top: 6px;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .notification-count {
+        padding: 8px 14px;
+        border-radius: 20px;
+        background: #e8f0f8;
+        color: #082f63;
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================
+       NOTIFICATION LIST
+       ========================================= */
+
+    .notification-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .notification-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+
+        padding: 20px;
+
+        background: #ffffff;
+
+        border: 1px solid #e2e8f0;
+
+        border-radius: 14px;
+
+        box-shadow:
+            0 6px 20px rgba(7, 29, 58, 0.05);
+
+        transition: 0.2s ease;
+    }
+
+    .notification-card:hover {
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 10px 25px rgba(7, 29, 58, 0.08);
+    }
+
+
+    /* =========================================
+       NOTIFICATION ICON
+       ========================================= */
+
+    .notification-icon {
+        width: 44px;
+        height: 44px;
+
+        flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 12px;
+
+        font-size: 20px;
+    }
+
+    .notification-icon.info {
+        background: #eff6ff;
+    }
+
+    .notification-icon.expense {
+        background: #fff7ed;
+    }
+
+    .notification-icon.income {
+        background: #ecfdf5;
+    }
+
+    .notification-icon.warning {
+        background: #fef2f2;
+    }
+
+    .notification-icon.balance {
+        background: #f0fdf4;
+    }
+
+
+    /* =========================================
+       NOTIFICATION CONTENT
+       ========================================= */
+
+    .notification-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .notification-title {
+        margin-bottom: 5px;
+
+        color: #071d3a;
+
+        font-size: 15px;
+
+        font-weight: 700;
+    }
+
+    .notification-message {
+        color: #64748b;
+
+        font-size: 14px;
+
+        line-height: 1.6;
+    }
+
+    .notification-date {
+        margin-top: 8px;
+
+        color: #94a3b8;
+
+        font-size: 12px;
+
+        font-weight: 600;
+    }
+
+
+    /* =========================================
+       EMPTY STATE
+       ========================================= */
+
+    .empty-notifications {
+        padding: 55px 25px;
+
+        text-align: center;
+
+        background: #ffffff;
+
+        border: 1px solid #e2e8f0;
+
+        border-radius: 16px;
+
+        box-shadow:
+            0 8px 25px rgba(7, 29, 58, 0.05);
+    }
+
+    .empty-icon {
+        font-size: 42px;
+        margin-bottom: 15px;
+    }
+
+    .empty-notifications h3 {
+        color: #071d3a;
+
+        font-size: 18px;
+
+        margin-bottom: 7px;
+    }
+
+    .empty-notifications p {
+        color: #64748b;
+
+        font-size: 14px;
+    }
+
+
+    /* =========================================
+       MOBILE
+       ========================================= */
+
+    @media (max-width: 600px) {
+
+        .notification-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .notification-header h2 {
+            font-size: 24px;
+        }
+
+        .notification-card {
+            padding: 16px;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+        }
+
+    }
+
+</style>
+
+
+<div class="notifications-page">
+
+
+    <!-- =====================================
+         HEADER
+         ===================================== -->
+
+    <div class="notification-header">
+
+        <div>
+
+            <h2>
+                Notifications
+            </h2>
+
+            <p>
+                Stay updated with your recent financial activity.
+            </p>
+
+        </div>
+
+
+        <div class="notification-count">
+
+            {{ notifications|length }}
+
+            {% if notifications|length == 1 %}
+                Notification
+            {% else %}
+                Notifications
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         NOTIFICATIONS
+         ===================================== -->
+
+    {% if notifications %}
+
+        <div class="notification-list">
+
+            {% for notification in notifications %}
+
+                <div class="notification-card">
+
+
+                    <!-- ICON -->
+
+                    <div class="notification-icon {{ notification.type }}">
+
+                        {% if notification.type == "expense" %}
+
+                            💸
+
+                        {% elif notification.type == "income" %}
+
+                            💰
+
+                        {% elif notification.type == "warning" %}
+
+                            ⚠️
+
+                        {% elif notification.type == "balance" %}
+
+                            💳
+
+                        {% else %}
+
+                            🔔
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- CONTENT -->
+
+                    <div class="notification-content">
+
+                        <div class="notification-title">
+
+                            {{ notification.title }}
+
+                        </div>
+
+                        <div class="notification-message">
+
+                            {{ notification.message }}
+
+                        </div>
+
+                        <div class="notification-date">
+
+                            {{ notification.date }}
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- =====================================
+             EMPTY STATE
+             ===================================== -->
+
+        <div class="empty-notifications">
+
+            <div class="empty-icon">
+                🔔
+            </div>
+
+            <h3>
+                No notifications
+            </h3>
+
+            <p>
+                You're all caught up. New financial updates will appear here.
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,638 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+    /* =========================================
+       EDIT TRANSACTION PAGE
+       ========================================= */
+
+    .edit-transaction-page {
+        width: 100%;
+    }
+
+
+    /* =========================================
+       PAGE HEADER
+       ========================================= */
+
+    .edit-page-header {
+        margin-bottom: 25px;
+    }
+
+    .edit-page-label {
+        display: inline-block;
+
+        margin-bottom: 7px;
+
+        color: #174f91;
+
+        font-size: 10px;
+        font-weight: 800;
+
+        letter-spacing: 1.4px;
+    }
+
+    .edit-page-header h2 {
+        margin: 0;
+
+        color: #071d3a;
+
+        font-size: 29px;
+        font-weight: 750;
+
+        letter-spacing: -0.6px;
+    }
+
+    .edit-page-header p {
+        margin-top: 6px;
+
+        color: #64748b;
+
+        font-size: 14px;
+    }
+
+
+    /* =========================================
+       FORM CARD
+       ========================================= */
+
+    .edit-form-card {
+        max-width: 850px;
+
+        background: #ffffff;
+
+        border: 1px solid #e2e8f0;
+
+        border-radius: 18px;
+
+        padding: 32px;
+
+        box-shadow:
+            0 10px 30px rgba(7, 29, 58, 0.07);
+    }
+
+
+    /* =========================================
+       FORM HEADER
+       ========================================= */
+
+    .edit-form-header {
+        display: flex;
+
+        align-items: center;
+
+        gap: 13px;
+
+        margin-bottom: 28px;
+
+        padding-bottom: 20px;
+
+        border-bottom: 1px solid #edf1f5;
+    }
+
+    .edit-form-icon {
+        width: 42px;
+        height: 42px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 11px;
+
+        background: #e8eef7;
+
+        color: #082f63;
+
+        font-size: 18px;
+        font-weight: 750;
+    }
+
+    .edit-form-header h3 {
+        margin: 0;
+
+        color: #071d3a;
+
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .edit-form-header p {
+        margin-top: 3px;
+
+        color: #94a3b8;
+
+        font-size: 12px;
+    }
+
+
+    /* =========================================
+       FORM GRID
+       ========================================= */
+
+    .edit-form {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 20px;
+    }
+
+    .form-group {
+        margin: 0;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        display: block;
+
+        margin-bottom: 8px;
+
+        color: #0f2746;
+
+        font-size: 13px;
+        font-weight: 650;
+    }
+
+
+    /* =========================================
+       INPUTS
+       ========================================= */
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+
+        height: 46px;
+
+        padding: 0 13px;
+
+        box-sizing: border-box;
+
+        border: 1px solid #cbd5e1;
+
+        border-radius: 9px;
+
+        background: #f8fafc;
+
+        color: #111827;
+
+        font-size: 14px;
+
+        outline: none;
+
+        transition: all 0.2s ease;
+    }
+
+    .form-group input:hover,
+    .form-group select:hover {
+        border-color: #94a3b8;
+
+        background: #ffffff;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: #082f63;
+
+        background: #ffffff;
+
+        box-shadow:
+            0 0 0 3px rgba(8, 47, 99, 0.10);
+    }
+
+
+    /* =========================================
+       AMOUNT INPUT
+       ========================================= */
+
+    .amount-wrapper {
+        position: relative;
+    }
+
+    .amount-symbol {
+        position: absolute;
+
+        left: 13px;
+        top: 50%;
+
+        transform: translateY(-50%);
+
+        color: #64748b;
+
+        font-size: 14px;
+        font-weight: 650;
+
+        pointer-events: none;
+    }
+
+    .amount-input {
+        padding-left: 30px !important;
+    }
+
+
+    /* =========================================
+       FORM ACTIONS
+       ========================================= */
+
+    .form-actions {
+        grid-column: 1 / -1;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+
+        padding-top: 10px;
+
+        margin-top: 3px;
+
+        border-top: 1px solid #edf1f5;
+    }
+
+
+    /* =========================================
+       UPDATE BUTTON
+       ========================================= */
+
+    .update-btn {
+        height: 44px;
+
+        padding: 0 22px;
+
+        border: none;
+
+        border-radius: 9px;
+
+        background: #082f63;
+
+        color: #ffffff;
+
+        font-size: 14px;
+        font-weight: 650;
+
+        cursor: pointer;
+
+        transition: all 0.2s ease;
+    }
+
+    .update-btn:hover {
+        background: #041f43;
+
+        transform: translateY(-1px);
+
+        box-shadow:
+            0 7px 18px rgba(8, 47, 99, 0.20);
+    }
+
+
+    /* =========================================
+       CANCEL BUTTON
+       ========================================= */
+
+    .cancel-btn {
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        height: 44px;
+
+        padding: 0 20px;
+
+        border-radius: 9px;
+
+        background: #111827;
+
+        color: #ffffff;
+
+        font-size: 14px;
+        font-weight: 650;
+
+        transition: all 0.2s ease;
+    }
+
+    .cancel-btn:hover {
+        background: #000000;
+
+        transform: translateY(-1px);
+
+        box-shadow:
+            0 7px 18px rgba(0, 0, 0, 0.15);
+    }
+
+
+    /* =========================================
+       RESPONSIVE
+       ========================================= */
+
+    @media (max-width: 650px) {
+
+        .edit-form-card {
+            padding: 23px 20px;
+
+            border-radius: 15px;
+        }
+
+        .edit-form {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group.full-width {
+            grid-column: auto;
+        }
+
+        .form-actions {
+            grid-column: auto;
+
+            flex-direction: column;
+
+            align-items: stretch;
+        }
+
+        .update-btn,
+        .cancel-btn {
+            width: 100%;
+        }
+
+        .edit-page-header h2 {
+            font-size: 25px;
+        }
+
+    }
+
+</style>
+
+<div class="edit-transaction-page">
+
+```
+<!-- =====================================
+     PAGE HEADER
+     ===================================== -->
+
+<div class="page-header edit-page-header">
+
+    <span class="edit-page-label">
+        TRANSACTION MANAGEMENT
+    </span>
+
+    <h2>
+        Edit Transaction
+    </h2>
+
+    <p>
+        Update your transaction information
+    </p>
+
+</div>
+
+
+<!-- =====================================
+     FORM CARD
+     ===================================== -->
+
+<div class="edit-form-card">
+
+
+    <div class="edit-form-header">
+
+        <div class="edit-form-icon">
+            ✎
+        </div>
+
+        <div>
+
+            <h3>
+                Transaction Details
+            </h3>
+
+            <p>
+                Modify the information below and save your changes
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <form method="POST"
+          class="edit-form">
+
+
+        <!-- TRANSACTION TYPE -->
+
+        <div class="form-group">
+
+            <label for="transactionType">
+                Transaction Type
+            </label>
+
+            <select
+                name="type"
+                id="transactionType"
+                required
+            >
+
+                <option
+                    value="expense"
+                    {% if transaction.type == "expense" %}
+                        selected
+                    {% endif %}
+                >
+                    Expense
+                </option>
+
+                <option
+                    value="income"
+                    {% if transaction.type == "income" %}
+                        selected
+                    {% endif %}
+                >
+                    Income
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- CATEGORY -->
+
+        <div class="form-group">
+
+            <label for="category">
+                Category
+            </label>
+
+            <select
+                name="category"
+                id="category"
+                required
+            >
+
+                {% for category in categories %}
+
+                <option
+                    value="{{ category.name }}"
+                    {% if transaction.category == category.name %}
+                        selected
+                    {% endif %}
+                >
+
+                    {{ category.name }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <!-- AMOUNT -->
+
+        <div class="form-group">
+
+            <label for="amount">
+                Amount
+            </label>
+
+            <div class="amount-wrapper">
+
+                <span class="amount-symbol">
+                    ₹
+                </span>
+
+                <input
+                    type="number"
+                    id="amount"
+                    name="amount"
+                    class="amount-input"
+                    step="0.01"
+                    min="0"
+                    value="{{ transaction.amount }}"
+                    required
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- DATE -->
+
+        <div class="form-group">
+
+            <label for="date">
+                Date
+            </label>
+
+            <input
+                type="date"
+                id="date"
+                name="date"
+                value="{{ transaction.date }}"
+                required
+            >
+
+        </div>
+
+
+        <!-- DESCRIPTION -->
+
+        <div class="form-group full-width">
+
+            <label for="description">
+                Description
+            </label>
+
+            <input
+                type="text"
+                id="description"
+                name="description"
+                value="{{ transaction.description }}"
+                placeholder="Example: Grocery shopping"
+                required
+            >
+
+        </div>
+
+
+        <!-- PAYMENT METHOD -->
+
+        <div class="form-group">
+
+            <label for="paymentMethod">
+                Payment Method
+            </label>
+
+            <select
+                name="payment_method"
+                id="paymentMethod"
+                required
+            >
+
+                {% for method in [
+                    "UPI",
+                    "Cash",
+                    "Credit Card",
+                    "Debit Card",
+                    "Bank Transfer"
+                ] %}
+
+                <option
+                    value="{{ method }}"
+                    {% if transaction.payment_method == method %}
+                        selected
+                    {% endif %}
+                >
+
+                    {{ method }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="form-actions">
+
+            <button
+                type="submit"
+                class="update-btn"
+            >
+                Update Transaction
+            </button>
+
+
+            <a
+                href="{{ url_for('transactions') }}"
+                class="cancel-btn"
+            >
+                Cancel
+            </a>
+
+        </div>
+
+
+    </form>
+
+</div>
+```
+
+</div>
+
+{% endblock %}

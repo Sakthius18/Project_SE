@@ -1,0 +1,1074 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* =====================================================
+   QUICK ADD TRANSACTION PAGE
+   ===================================================== */
+
+.transaction-page {
+    min-height: calc(100vh - 80px);
+
+    background: #f4f7fb;
+
+    padding: 40px 20px;
+}
+
+
+/* =====================================================
+   PAGE HEADER
+   ===================================================== */
+
+.page-header {
+    max-width: 900px;
+
+    margin: 0 auto 25px;
+}
+
+.page-header h2 {
+    margin: 0;
+
+    font-size: 30px;
+
+    font-weight: 750;
+
+    color: #071a33;
+
+    letter-spacing: -0.5px;
+}
+
+.page-header p {
+    margin: 7px 0 0;
+
+    color: #64748b;
+
+    font-size: 15px;
+}
+
+
+/* =====================================================
+   FORM CARD
+   ===================================================== */
+
+.form-card {
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    padding: 35px;
+
+    border: 1px solid #dbe4f0;
+
+    box-shadow:
+        0 12px 35px
+        rgba(7, 26, 51, 0.10);
+}
+
+
+/* =====================================================
+   QUICK TYPE SELECTOR
+   ===================================================== */
+
+.transaction-type-selector {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+
+    margin-bottom: 28px;
+}
+
+.type-option {
+    position: relative;
+}
+
+.type-option input {
+    position: absolute;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+.type-option label {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 52px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 10px;
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.type-option label:hover {
+    border-color: #7c91ad;
+
+    background: #ffffff;
+}
+
+
+/* Selected Expense */
+
+.type-option input[value="expense"]:checked + label {
+    background: #111827;
+
+    border-color: #111827;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 6px 15px
+        rgba(17, 24, 39, 0.15);
+}
+
+
+/* Selected Income */
+
+.type-option input[value="income"]:checked + label {
+    background: #082f63;
+
+    border-color: #082f63;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 6px 15px
+        rgba(8, 47, 99, 0.18);
+}
+
+
+/* =====================================================
+   AMOUNT SECTION
+   ===================================================== */
+
+.amount-section {
+    margin-bottom: 27px;
+}
+
+.amount-label {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #0b1f3a;
+
+    font-size: 14px;
+
+    font-weight: 650;
+}
+
+.amount-wrapper {
+    position: relative;
+}
+
+.currency-symbol {
+    position: absolute;
+
+    left: 17px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #64748b;
+
+    font-size: 21px;
+
+    font-weight: 700;
+
+    pointer-events: none;
+}
+
+.amount-input {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 17px 18px 17px 43px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 12px;
+
+    background: #f8fafc;
+
+    color: #071a33;
+
+    font-size: 25px;
+
+    font-weight: 700;
+
+    outline: none;
+
+    transition: all 0.2s ease;
+}
+
+.amount-input::placeholder {
+    color: #cbd5e1;
+}
+
+.amount-input:hover {
+    border-color: #7c91ad;
+
+    background: #ffffff;
+}
+
+.amount-input:focus {
+    border-color: #0b3b75;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(11, 59, 117, 0.12);
+}
+
+
+/* Remove number arrows */
+
+.amount-input::-webkit-outer-spin-button,
+.amount-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+
+    margin: 0;
+}
+
+.amount-input[type="number"] {
+    appearance: textfield;
+
+    -moz-appearance: textfield;
+}
+
+
+/* =====================================================
+   QUICK AMOUNT BUTTONS
+   ===================================================== */
+
+.quick-amounts {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 11px;
+}
+
+.quick-amount-btn {
+    border: 1px solid #dbe4f0;
+
+    background: #f8fafc;
+
+    color: #365273;
+
+    border-radius: 8px;
+
+    padding: 7px 12px;
+
+    font-size: 12px;
+
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.quick-amount-btn:hover {
+    background: #e8eef7;
+
+    border-color: #b9c8da;
+
+    color: #082f63;
+}
+
+
+/* =====================================================
+   FORM GRID
+   ===================================================== */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+}
+
+
+/* =====================================================
+   FORM GROUP
+   ===================================================== */
+
+.form-group {
+    margin-bottom: 21px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #0b1f3a;
+}
+
+
+/* =====================================================
+   INPUTS & SELECTS
+   ===================================================== */
+
+.form-group input,
+.form-group select {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 13px 15px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 10px;
+
+    background: #f8fafc;
+
+    color: #0f172a;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: all 0.2s ease;
+}
+
+.form-group input::placeholder {
+    color: #94a3b8;
+}
+
+.form-group input:hover,
+.form-group select:hover {
+    border-color: #7c91ad;
+
+    background: #ffffff;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #0b3b75;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(11, 59, 117, 0.12);
+}
+
+
+/* =====================================================
+   DATE
+   ===================================================== */
+
+.form-group input[type="date"] {
+    color-scheme: light;
+}
+
+
+/* =====================================================
+   PAYMENT METHOD QUICK BUTTONS
+   ===================================================== */
+
+.payment-methods {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 8px;
+}
+
+.payment-option {
+    position: relative;
+}
+
+.payment-option input {
+    position: absolute;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+.payment-option label {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 42px;
+
+    padding: 7px;
+
+    border: 1px solid #dbe4f0;
+
+    border-radius: 8px;
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-size: 11px;
+
+    font-weight: 650;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.payment-option label:hover {
+    background: #ffffff;
+
+    border-color: #7c91ad;
+}
+
+.payment-option input:checked + label {
+    background: #e8eef7;
+
+    border-color: #082f63;
+
+    color: #082f63;
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+   ===================================================== */
+
+.form-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 8px;
+
+    padding-top: 8px;
+}
+
+.btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 13px 22px;
+
+    font-size: 14px;
+
+    font-weight: 650;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+
+/* Save */
+
+.btn.primary {
+    background: #082f63;
+
+    color: #ffffff;
+}
+
+.btn.primary:hover {
+    background: #041f43;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 7px 18px
+        rgba(8, 47, 99, 0.25);
+}
+
+.btn.primary:active {
+    transform: translateY(0);
+}
+
+
+/* Cancel */
+
+.btn.secondary {
+    background: #111827;
+
+    color: #ffffff;
+}
+
+.btn.secondary:hover {
+    background: #000000;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 7px 18px
+        rgba(0, 0, 0, 0.18);
+}
+
+
+/* =====================================================
+   KEYBOARD SHORTCUT HINT
+   ===================================================== */
+
+.quick-hint {
+    margin-top: 16px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 700px) {
+
+    .transaction-page {
+        padding: 25px 15px;
+    }
+
+    .page-header h2 {
+        font-size: 25px;
+    }
+
+    .form-card {
+        padding: 25px 20px;
+
+        border-radius: 14px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+
+        gap: 0;
+    }
+
+    .form-group.full-width {
+        grid-column: auto;
+    }
+
+    .payment-methods {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .form-actions {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .btn {
+        width: 100%;
+
+        box-sizing: border-box;
+    }
+
+}
+
+</style>
+
+<div class="transaction-page">
+
+```
+<!-- =================================================
+     PAGE HEADER
+     ================================================= -->
+
+<div class="page-header">
+
+    <h2>
+        Quick Add Transaction
+    </h2>
+
+    <p>
+        Add your income or expense in a few seconds.
+    </p>
+
+</div>
+
+
+
+<!-- =================================================
+     FORM CARD
+     ================================================= -->
+
+<div class="form-card">
+
+    <form method="POST">
+
+
+        <!-- =========================================
+             TRANSACTION TYPE
+             ========================================= -->
+
+        <div class="transaction-type-selector">
+
+
+            <div class="type-option">
+
+                <input
+                    type="radio"
+                    name="type"
+                    id="expenseType"
+                    value="expense"
+                    checked
+                >
+
+                <label for="expenseType">
+                    Expense
+                </label>
+
+            </div>
+
+
+            <div class="type-option">
+
+                <input
+                    type="radio"
+                    name="type"
+                    id="incomeType"
+                    value="income"
+                >
+
+                <label for="incomeType">
+                    Income
+                </label>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================================
+             AMOUNT
+             ========================================= -->
+
+        <div class="amount-section">
+
+            <label
+                for="amount"
+                class="amount-label"
+            >
+                Amount
+            </label>
+
+
+            <div class="amount-wrapper">
+
+                <span class="currency-symbol">
+                    ₹
+                </span>
+
+                <input
+                    type="number"
+                    id="amount"
+                    name="amount"
+                    class="amount-input"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                    required
+                    autofocus
+                >
+
+            </div>
+
+
+            <!-- QUICK AMOUNTS -->
+
+            <div class="quick-amounts">
+
+                <button
+                    type="button"
+                    class="quick-amount-btn"
+                    data-amount="100"
+                >
+                    ₹100
+                </button>
+
+                <button
+                    type="button"
+                    class="quick-amount-btn"
+                    data-amount="500"
+                >
+                    ₹500
+                </button>
+
+                <button
+                    type="button"
+                    class="quick-amount-btn"
+                    data-amount="1000"
+                >
+                    ₹1,000
+                </button>
+
+                <button
+                    type="button"
+                    class="quick-amount-btn"
+                    data-amount="2000"
+                >
+                    ₹2,000
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================================
+             FORM GRID
+             ========================================= -->
+
+        <div class="form-grid">
+
+
+            <!-- CATEGORY -->
+
+            <div class="form-group">
+
+                <label for="category">
+                    Category
+                </label>
+
+                <select
+                    name="category"
+                    id="category"
+                    required
+                >
+
+                    {% for category in categories %}
+
+                    <option
+                        value="{{ category.name }}"
+                    >
+                        {{ category.name }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+
+            <!-- DATE -->
+
+            <div class="form-group">
+
+                <label for="date">
+                    Date
+                </label>
+
+                <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    required
+                >
+
+            </div>
+
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="form-group">
+
+                <label for="description">
+                    Description
+                </label>
+
+                <input
+                    type="text"
+                    id="description"
+                    name="description"
+                    placeholder="Example: Grocery shopping"
+                    required
+                >
+
+            </div>
+
+
+
+            <!-- PAYMENT METHOD -->
+
+            <div class="form-group">
+
+                <label>
+                    Payment Method
+                </label>
+
+
+                <div class="payment-methods">
+
+
+                    <div class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment_method"
+                            id="upi"
+                            value="UPI"
+                            checked
+                        >
+
+                        <label for="upi">
+                            UPI
+                        </label>
+
+                    </div>
+
+
+                    <div class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment_method"
+                            id="cash"
+                            value="Cash"
+                        >
+
+                        <label for="cash">
+                            Cash
+                        </label>
+
+                    </div>
+
+
+                    <div class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment_method"
+                            id="creditCard"
+                            value="Credit Card"
+                        >
+
+                        <label for="creditCard">
+                            Credit Card
+                        </label>
+
+                    </div>
+
+
+                    <div class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment_method"
+                            id="debitCard"
+                            value="Debit Card"
+                        >
+
+                        <label for="debitCard">
+                            Debit Card
+                        </label>
+
+                    </div>
+
+
+                    <div class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment_method"
+                            id="bankTransfer"
+                            value="Bank Transfer"
+                        >
+
+                        <label for="bankTransfer">
+                            Bank Transfer
+                        </label>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================================
+             ACTION BUTTONS
+             ========================================= -->
+
+        <div class="form-actions">
+
+
+            <button
+                type="submit"
+                class="btn primary"
+            >
+                Save Transaction
+            </button>
+
+
+            <a
+                href="{{ url_for('transactions') }}"
+                class="btn secondary"
+            >
+                Cancel
+            </a>
+
+
+        </div>
+
+
+        <div class="quick-hint">
+            Select an amount above for faster entry.
+        </div>
+
+
+    </form>
+
+</div>
+```
+
+</div>
+
+<!-- =====================================================
+     QUICK ADD JAVASCRIPT
+     ===================================================== -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const amountInput =
+            document.getElementById("amount");
+
+        const quickAmountButtons =
+            document.querySelectorAll(
+                ".quick-amount-btn"
+            );
+
+
+        /*
+         * QUICK AMOUNT BUTTONS
+         */
+
+        quickAmountButtons.forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const amount =
+                            this.dataset.amount;
+
+                        amountInput.value = amount;
+
+                        amountInput.focus();
+
+                    }
+                );
+
+            }
+        );
+
+
+        /*
+         * ENTER KEY
+         *
+         * When the user enters an amount and
+         * presses Enter, move to description.
+         */
+
+        amountInput.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    const description =
+                        document.getElementById(
+                            "description"
+                        );
+
+                    if (description) {
+
+                        description.focus();
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+{% endblock %}

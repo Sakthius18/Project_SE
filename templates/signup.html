@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up | Smart Expenses Tracker</title>
+
+
+    <style>
+
+        /* =========================================
+           GLOBAL
+        ========================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            color: #ffffff;
+
+            background:
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(37, 99, 235, 0.22),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 85% 80%,
+                    rgba(30, 64, 175, 0.20),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #020617 0%,
+                    #06152b 50%,
+                    #071d3a 100%
+                );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            overflow-x: hidden;
+        }
+
+
+        /* =========================================
+           BACKGROUND DECORATION
+        ========================================= */
+
+        .background-circle {
+
+            position: fixed;
+
+            border-radius: 50%;
+
+            pointer-events: none;
+
+            filter: blur(1px);
+        }
+
+        .circle-one {
+
+            width: 280px;
+            height: 280px;
+
+            top: -100px;
+            left: -80px;
+
+            border:
+                1px solid
+                rgba(96, 165, 250, 0.15);
+
+            background:
+                rgba(30, 64, 175, 0.08);
+        }
+
+        .circle-two {
+
+            width: 350px;
+            height: 350px;
+
+            right: -140px;
+            bottom: -130px;
+
+            border:
+                1px solid
+                rgba(59, 130, 246, 0.15);
+
+            background:
+                rgba(37, 99, 235, 0.07);
+        }
+
+
+        /* =========================================
+           SIGNUP CONTAINER
+        ========================================= */
+
+        .auth-container {
+
+            width: 100%;
+            max-width: 440px;
+
+            padding: 25px;
+
+            position: relative;
+
+            z-index: 5;
+        }
+
+
+        /* =========================================
+           AUTH CARD
+        ========================================= */
+
+        .auth-card {
+
+            padding: 40px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(15, 23, 42, 0.97),
+                    rgba(2, 6, 23, 0.97)
+                );
+
+            border:
+                1px solid
+                rgba(96, 165, 250, 0.20);
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.55),
+                inset 0 1px 0
+                rgba(255, 255, 255, 0.04);
+
+            backdrop-filter: blur(15px);
+
+            animation:
+                cardAppear 0.6s ease;
+        }
+
+
+        @keyframes cardAppear {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(20px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+
+        }
+
+
+        /* =========================================
+           LOGO
+        ========================================= */
+
+        .auth-logo {
+
+            width: 68px;
+            height: 68px;
+
+            margin: 0 auto 20px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 17px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #2563eb,
+                    #0f3b82
+                );
+
+            color: #ffffff;
+
+            font-size: 32px;
+
+            font-weight: 800;
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.12);
+
+            box-shadow:
+                0 12px 30px
+                rgba(37, 99, 235, 0.30);
+        }
+
+
+        /* =========================================
+           HEADING
+        ========================================= */
+
+        .auth-card h1 {
+
+            text-align: center;
+
+            color: #ffffff;
+
+            font-size: 27px;
+
+            font-weight: 750;
+
+            letter-spacing: -0.6px;
+        }
+
+
+        .auth-subtitle {
+
+            margin-top: 9px;
+
+            margin-bottom: 30px;
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================================
+           FLASH MESSAGES
+        ========================================= */
+
+        .alert {
+
+            padding: 12px 14px;
+
+            margin-bottom: 20px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+
+            line-height: 1.4;
+        }
+
+
+        .alert.success {
+
+            background:
+                rgba(22, 101, 52, 0.18);
+
+            border:
+                1px solid
+                rgba(74, 222, 128, 0.25);
+
+            color: #86efac;
+        }
+
+
+        .alert.error {
+
+            background:
+                rgba(127, 29, 29, 0.18);
+
+            border:
+                1px solid
+                rgba(248, 113, 113, 0.25);
+
+            color: #fca5a5;
+        }
+
+
+        /* =========================================
+           FORM GROUP
+        ========================================= */
+
+        .form-group {
+
+            margin-bottom: 19px;
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #e2e8f0;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================================
+           INPUTS
+        ========================================= */
+
+        .form-group input {
+
+            width: 100%;
+
+            height: 48px;
+
+            padding: 0 14px;
+
+            background: #020617;
+
+            color: #ffffff;
+
+            border:
+                1px solid #263852;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            font-size: 14px;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+        }
+
+
+        .form-group input::placeholder {
+
+            color: #64748b;
+        }
+
+
+        .form-group input:hover {
+
+            border-color: #3b5575;
+        }
+
+
+        .form-group input:focus {
+
+            background: #030b1b;
+
+            border-color: #3b82f6;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(59, 130, 246, 0.13);
+        }
+
+
+        /* =========================================
+           SIGNUP BUTTON
+        ========================================= */
+
+        .auth-btn {
+
+            width: 100%;
+
+            height: 50px;
+
+            margin-top: 5px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #174ea6
+                );
+
+            color: #ffffff;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 10px 25px
+                rgba(37, 99, 235, 0.22);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+        }
+
+
+        .auth-btn:hover {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #3b82f6,
+                    #2563eb
+                );
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 14px 30px
+                rgba(37, 99, 235, 0.32);
+        }
+
+
+        .auth-btn:active {
+
+            transform:
+                translateY(0);
+        }
+
+
+        /* =========================================
+           LOGIN LINK
+        ========================================= */
+
+        .auth-footer {
+
+            margin-top: 26px;
+
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+
+        .auth-footer a {
+
+            color: #60a5fa;
+
+            font-weight: 650;
+
+            text-decoration: none;
+
+            transition:
+                color 0.2s ease;
+        }
+
+
+        .auth-footer a:hover {
+
+            color: #93c5fd;
+
+            text-decoration: underline;
+        }
+
+
+        /* =========================================
+           PASSWORD INFO
+        ========================================= */
+
+        .password-info {
+
+            margin-top: -10px;
+
+            margin-bottom: 18px;
+
+            color: #475569;
+
+            font-size: 11px;
+        }
+
+
+        /* =========================================
+           BOTTOM TEXT
+        ========================================= */
+
+        .security-text {
+
+            margin-top: 22px;
+
+            padding-top: 18px;
+
+            border-top:
+                1px solid
+                rgba(148, 163, 184, 0.10);
+
+            text-align: center;
+
+            color: #475569;
+
+            font-size: 11px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 500px) {
+
+            .auth-container {
+
+                padding: 18px;
+            }
+
+
+            .auth-card {
+
+                padding: 35px 25px;
+
+                border-radius: 18px;
+            }
+
+
+            .auth-logo {
+
+                width: 62px;
+                height: 62px;
+
+                font-size: 29px;
+            }
+
+
+            .auth-card h1 {
+
+                font-size: 24px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- BACKGROUND -->
+
+    <div class="background-circle circle-one"></div>
+
+    <div class="background-circle circle-two"></div>
+
+
+    <!-- SIGNUP CONTAINER -->
+
+    <div class="auth-container">
+
+        <div class="auth-card">
+
+
+            <!-- LOGO -->
+
+            <div class="auth-logo">
+                ₹
+            </div>
+
+
+            <!-- TITLE -->
+
+            <h1>
+                Create Account
+            </h1>
+
+
+            <p class="auth-subtitle">
+                Start managing your money
+                smarter and easier.
+            </p>
+
+
+            <!-- FLASH MESSAGES -->
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    {% for category, message in messages %}
+
+                        <div class="alert {{ category }}">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endwith %}
+
+
+            <!-- SIGNUP FORM -->
+
+            <form method="POST">
+
+
+                <!-- FULL NAME -->
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        minlength="6"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="password-info">
+                    Password must contain at least 6 characters.
+                </div>
+
+
+                <!-- CREATE ACCOUNT -->
+
+                <button
+                    type="submit"
+                    class="auth-btn"
+                >
+                    Create Account
+                </button>
+
+
+            </form>
+
+
+            <!-- LOGIN -->
+
+            <p class="auth-footer">
+
+                Already have an account?
+
+                <a href="{{ url_for('login') }}">
+                    Login
+                </a>
+
+            </p>
+
+
+            <!-- FOOTER -->
+
+            <div class="security-text">
+
+                Smart Expenses Tracker
+                <br>
+
+                Secure personal expense management
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>
